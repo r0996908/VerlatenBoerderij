@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: 1531a0bfbf7f4ef4c858a0d071e00ebb
+AssetOrigin:
+  serializedVersion: 1
+  productId: 290424
+  packageName: Retro Farm and Birches
+  packageVersion: 1.0
+  assetPath: Assets/Dreamplex/RetroBarnFarmAndBirches/Meshes/Birch_Trees/Trees_Full_One_Part_HighPoly/birch_medium_orange_leaves.fbx
+  uploadId: 677855
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -26,8 +33,6 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -117,10 +122,3 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 290424
-  packageName: Retro Farm and Birches
-  packageVersion: 1.0
-  assetPath: Assets/Dreamplex/RetroBarnFarmAndBirches/Meshes/Birch_Trees/Trees_Full_One_Part_HighPoly/birch_medium_orange_leaves.fbx
-  uploadId: 677855
