@@ -1,72 +1,45 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ZombieController : MonoBehaviour
 {
     // --- BEWEGING ---
-    [SerializeField]
-    private float moveSpeed = 1f;
-
-    [SerializeField]
-    private float stoppingDistance = 1.5f;
+    [SerializeField] private float moveSpeed = 1f;
+    [SerializeField] private float stoppingDistance = 1.5f;
 
     // --- SPELER ---
-    [SerializeField]
-    private Transform playerTransform;
+    [SerializeField] private Transform playerTransform;
+
+    // --- AUDIO SETTINGS ---
+    [SerializeField] private float maxHearDistance = 20f;
+
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip[] zombieSounds;
+
+    [SerializeField] private float minSoundDelay = 3f;
+    [SerializeField] private float maxSoundDelay = 8f;
+
+    private float nextSoundTime;
 
     // --- COMPONENTEN ---
     private Rigidbody m_Rigidbody;
     private Animator m_Animator;
 
-    // --- AUDIO ---
-    [SerializeField]
-    private AudioSource audioSource;
-
-    [SerializeField]
-    private AudioClip[] zombieSounds;
-
-    [SerializeField]
-    private float minSoundDelay = 3f;
-
-    [SerializeField]
-    private float maxSoundDelay = 8f;
-
-    private float nextSoundTime;
-
     private void Start()
     {
-        // AUDIO
         if (audioSource == null)
-        {
             audioSource = GetComponent<AudioSource>();
-        }
 
-        nextSoundTime = Time.time + Random.Range(minSoundDelay, maxSoundDelay);
-
-        // COMPONENTEN
         m_Rigidbody = GetComponent<Rigidbody>();
-
-        if (m_Rigidbody == null)
-        {
-            Debug.LogWarning("No Rigidbody found");
-        }
-
         m_Animator = GetComponent<Animator>();
 
-        if (m_Animator == null)
-        {
-            Debug.LogWarning("No Animator found");
-        }
-
-        // PLAYER AUTO FIND
         if (playerTransform == null)
         {
             GameObject playerObject = GameObject.FindWithTag("Player");
-
             if (playerObject != null)
-            {
                 playerTransform = playerObject.transform;
-            }
         }
+
+        nextSoundTime = Time.time + Random.Range(minSoundDelay, maxSoundDelay);
     }
 
     private void FixedUpdate()
@@ -78,6 +51,7 @@ public class ZombieController : MonoBehaviour
 
         float distanceToPlayer = directionToPlayer.magnitude;
 
+        // --- BEWEGING ---
         if (distanceToPlayer > stoppingDistance)
         {
             Vector3 moveDirection = directionToPlayer.normalized;
@@ -102,16 +76,25 @@ public class ZombieController : MonoBehaviour
                 m_Animator.SetBool("isWalking", false);
         }
 
-        HandleSounds();
+        HandleSounds(distanceToPlayer);
     }
 
-    private void HandleSounds()
+    private void HandleSounds(float distance)
     {
         if (audioSource == null || zombieSounds.Length == 0) return;
 
+        // ❌ buiten range = geen geluid
+        if (distance > maxHearDistance) return;
+
+        // volume gebaseerd op afstand (belangrijk!)
+        float volume = 1f - Mathf.Clamp01(distance / maxHearDistance);
+        audioSource.volume = volume;
+
         if (Time.time >= nextSoundTime)
         {
-            audioSource.PlayOneShot(zombieSounds[Random.Range(0, zombieSounds.Length)]);
+            AudioClip clip = zombieSounds[Random.Range(0, zombieSounds.Length)];
+            audioSource.PlayOneShot(clip);
+
             nextSoundTime = Time.time + Random.Range(minSoundDelay, maxSoundDelay);
         }
     }
