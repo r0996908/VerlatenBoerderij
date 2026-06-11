@@ -1,12 +1,24 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
+// Stuurt het pauzemenu aan.
+// Pauzeert en hervat het spel
+// Toont en verbergt het pauzepanel
+// Laat terugkeren naar het hoofdmenu
+
 public class PauseMenuController : MonoBehaviour
 {
+    [Header("UI verwijzingen")]
     [SerializeField] private GameObject pausePanel;
+    // Panel dat getoond wordt wanneer het spel gepauzeerd is
+
+    [Header("Scene instellingen")]
     [SerializeField] private string mainMenuSceneName = "MainMenu";
+    // Naam van de hoofdmenu-scene
 
     private bool m_IsPaused = false;
+    // Flag die bijhoudt of het spel momenteel gepauzeerd is
 
     private void Start()
     {
@@ -21,6 +33,7 @@ public class PauseMenuController : MonoBehaviour
 
     private void Update()
     {
+        // Escape om te pauzeren of hervatten
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (m_IsPaused)
@@ -30,9 +43,14 @@ public class PauseMenuController : MonoBehaviour
         }
     }
 
+
+    // Pauzeert het spel en toont het pauzepanel.
+
     private void PauseGame()
     {
-        pausePanel.SetActive(true);
+        if (pausePanel != null)
+            pausePanel.SetActive(true);
+
         Time.timeScale = 0f;
 
         Cursor.lockState = CursorLockMode.None;
@@ -41,9 +59,14 @@ public class PauseMenuController : MonoBehaviour
         m_IsPaused = true;
     }
 
+
+    // Hervat het spel en verbergt het pauzepanel.
+
     private void ResumeGame()
     {
-        pausePanel.SetActive(false);
+        if (pausePanel != null)
+            pausePanel.SetActive(false);
+
         Time.timeScale = 1f;
 
         Cursor.lockState = CursorLockMode.Locked;
@@ -52,16 +75,20 @@ public class PauseMenuController : MonoBehaviour
         m_IsPaused = false;
     }
 
+
+    // Wordt gekoppeld aan de Resume-knop in het pauzemenu.
+
     public void OnResumeButtonClicked()
     {
         ResumeGame();
     }
 
-    public void OnSettingsButtonClicked()
-    {
-        Debug.Log("Settings nog niet geïmplementeerd.");
-    }
+    
 
+ 
+    // Wordt gekoppeld aan de Quit-knop in het pauzemenu.
+    // Laadt het hoofdmenu.
+  
     public void OnQuitButtonClicked()
     {
         Time.timeScale = 1f;
