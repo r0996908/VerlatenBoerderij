@@ -1,48 +1,39 @@
 ﻿using UnityEngine;
 
-public class ZombieController : MonoBehaviour
+public class ZombieController : EnemyBase
 {
-    // --- BEWEGING ---
-    [SerializeField] private float moveSpeed = 1f;
     [SerializeField] private float stoppingDistance = 1.5f;
 
-    // --- SPELER ---
-    [SerializeField] private Transform playerTransform;
-
-    // --- AUDIO SETTINGS ---
     [SerializeField] private float maxHearDistance = 20f;
-
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip[] zombieSounds;
-
     [SerializeField] private float minSoundDelay = 3f;
     [SerializeField] private float maxSoundDelay = 8f;
 
     private float nextSoundTime;
 
-    // --- COMPONENTEN ---
     private Rigidbody m_Rigidbody;
     private Animator m_Animator;
 
-    private void Start()
+    protected override void Start()
     {
-        if (audioSource == null)
-            audioSource = GetComponent<AudioSource>();
+        base.Start();
 
         m_Rigidbody = GetComponent<Rigidbody>();
         m_Animator = GetComponent<Animator>();
 
-        if (playerTransform == null)
-        {
-            GameObject playerObject = GameObject.FindWithTag("Player");
-            if (playerObject != null)
-                playerTransform = playerObject.transform;
-        }
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
 
         nextSoundTime = Time.time + Random.Range(minSoundDelay, maxSoundDelay);
     }
 
     private void FixedUpdate()
+    {
+        HandleBehaviour();
+    }
+
+    protected override void HandleBehaviour()
     {
         if (playerTransform == null || m_Rigidbody == null) return;
 
@@ -51,7 +42,6 @@ public class ZombieController : MonoBehaviour
 
         float distanceToPlayer = directionToPlayer.magnitude;
 
-        // --- BEWEGING ---
         if (distanceToPlayer > stoppingDistance)
         {
             Vector3 moveDirection = directionToPlayer.normalized;
@@ -82,11 +72,8 @@ public class ZombieController : MonoBehaviour
     private void HandleSounds(float distance)
     {
         if (audioSource == null || zombieSounds.Length == 0) return;
-
-        // ❌ buiten range = geen geluid
         if (distance > maxHearDistance) return;
 
-        // volume gebaseerd op afstand (belangrijk!)
         float volume = 1f - Mathf.Clamp01(distance / maxHearDistance);
         audioSource.volume = volume;
 

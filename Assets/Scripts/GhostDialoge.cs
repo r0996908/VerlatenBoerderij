@@ -3,9 +3,10 @@ using TMPro;
 
 public class GhostDialogue : MonoBehaviour
 {
-    public TextMeshProUGUI dialogueText;
-    public GameObject dialoguePanel;
+    [SerializeField] private TextMeshProUGUI dialogueText;
+    [SerializeField] private GameObject dialoguePanel;
 
+    [SerializeField]
     private string[] lines = {
         "Wie... wie ben jij?",
         "Deze boerderij verlaat je niet zomaar.",
@@ -17,7 +18,14 @@ public class GhostDialogue : MonoBehaviour
 
     private void Update()
     {
-        if (playerInRange && (Input.GetKeyDown(KeyCode.E) || Input.GetMouseButtonDown(0)))
+        HandleInput();
+    }
+
+    private void HandleInput()
+    {
+        if (!playerInRange) return;
+
+        if (Input.GetKeyDown(KeyCode.E) || Input.GetMouseButtonDown(0))
         {
             ShowNextLine();
         }
