@@ -12,7 +12,7 @@ using UnityEngine.SceneManagement; // Nodig om tussen scenes te wisselen (Les 6)
 // SETUP in Unity:
 //   1. Maak een leeg GameObject in de MainMenu scene, noem het "MenuManager"
 //   2. Voeg dit script toe via Add Component
-//   3. Sleep de knoppen naar de juiste velden in de Inspector
+//   3. Sleep de QuitButton naar het juiste veld in de Inspector
 //   4. Koppel elke knop aan de juiste methode via Button OnClick() in de Inspector
 
 public class MainMenuController : MonoBehaviour
@@ -20,8 +20,8 @@ public class MainMenuController : MonoBehaviour
     // --- SCENE NAAM ---
 
     [SerializeField]
-    // De exacte naam van je game scene.
-    // Pas dit aan in de Inspector als je scene anders heet.
+    // De exacte naam van de game scene zoals die staat in de Build Profiles Scene List.
+    // Je kan dit aanpassen in de Inspector zonder het script te wijzigen.
     private string gameSceneName = "AbandonedFarm";
 
     // --- KNOPPEN ---
@@ -29,48 +29,40 @@ public class MainMenuController : MonoBehaviour
     [SerializeField]
     // Referentie naar de Quit knop.
     // Sleep de QuitButton hierheen in de Inspector.
-    // Deze knop wordt verborgen bij het startmenu en getoond bij het pausemenu.
+    // Deze knop is verborgen in het startmenu en zichtbaar in het pausemenu.
     private GameObject quitButton;
 
     // Start() wordt éénmalig aangeroepen bij het begin van de scene. (Les 1)
     private void Start()
     {
-        // Verberg de Quit knop bij het opstarten van het startmenu.
-        // SetActive(false) maakt een GameObject onzichtbaar en inactief. (Les 5)
-        // De Quit knop is alleen zichtbaar tijdens het pausemenu in de game scene.
+        // Verberg de Quit knop bij het opstarten van het startmenu. (Les 5 - SetActive)
         if (quitButton != null)
         {
             quitButton.SetActive(false);
         }
     }
 
-    // --- KNOP METHODES ---
-    // Koppel deze methodes aan de knoppen via Button OnClick() in de Inspector.
-
     // Wordt aangeroepen als de speler op de Start knop klikt.
-    // Laadt de game scene. (Les 6 - SceneManagement)
+    // Laadt de game scene via SceneManager. (Les 6)
     public void OnStartButtonClicked()
     {
-        // LoadScene laadt een nieuwe scene op basis van de naam. (Les 6)
         SceneManager.LoadScene(gameSceneName);
     }
 
     // Wordt aangeroepen als de speler op de Settings knop klikt.
-    // Voorlopig nog leeg, kan later ingevuld worden.
+    // Voorlopig nog leeg, wordt later ingevuld.
     public void OnSettingsButtonClicked()
     {
-        // TODO: instellingen toevoegen in een later stadium
-        Debug.Log("Settings knop geklikt - nog niet geïmplementeerd.");
+        Debug.Log("Settings nog niet geïmplementeerd.");
     }
 
     // Wordt aangeroepen als de speler op de Quit knop klikt.
-    // Sluit de applicatie af.
     public void OnQuitButtonClicked()
     {
-        // Application.Quit() sluit de game af in een build. (Les 6)
+        // Sluit de game af in een build. (Les 6)
         Application.Quit();
 
-        // Stopt het spelen in de Unity editor (werkt niet in een build).
+        // Stopt het spelen in de Unity editor.
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
         #endif
