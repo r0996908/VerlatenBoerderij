@@ -12503,7 +12503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c12c051d09cde6449bc799b277a942f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombieController
-  moveSpeed: 2
+  moveSpeed: 1
   playerTransform: {fileID: 433883575}
   stoppingDistance: 1.02
   maxHearDistance: 15
@@ -13680,7 +13680,7 @@ MonoBehaviour:
   playerTransform: {fileID: 433883575}
   minWanderTime: 2
   maxWanderTime: 5
-  detectionRadius: 10
+  detectionRadius: 7
   attackRadius: 1
   attackCooldown: 1
   attackDamage: 10
@@ -15119,15 +15119,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 951850249008768299, guid: be9ea7e95a286b345bab36a016c06e95, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 29.2
+      value: 12.55
       objectReference: {fileID: 0}
     - target: {fileID: 951850249008768299, guid: be9ea7e95a286b345bab36a016c06e95, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.03
+      value: 3.064
       objectReference: {fileID: 0}
     - target: {fileID: 951850249008768299, guid: be9ea7e95a286b345bab36a016c06e95, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.87
+      value: 6.36
       objectReference: {fileID: 0}
     - target: {fileID: 951850249008768299, guid: be9ea7e95a286b345bab36a016c06e95, type: 3}
       propertyPath: m_LocalRotation.w
