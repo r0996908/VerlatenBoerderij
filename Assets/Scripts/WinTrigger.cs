@@ -1,3 +1,4 @@
+// WinTrigger.cs
 using UnityEngine;
 
 // Detecteert wanneer de speler de escape-zone bereikt.

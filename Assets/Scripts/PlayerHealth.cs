@@ -1,3 +1,4 @@
+// PlayerHealth.cs
 using System.Collections; // Nodig voor de timer (IEnumerator)
 using UnityEngine;
 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿// ZombieController.cs
+using UnityEngine;
 
 
 // Stuurt het gedrag van de zombie aan.

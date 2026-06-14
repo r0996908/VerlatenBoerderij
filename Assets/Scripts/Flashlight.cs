@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿// Flashlight.cs
+using UnityEngine;
 
 public class Flashlight : MonoBehaviour
 {

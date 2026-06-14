@@ -1,3 +1,4 @@
+// GhostDialogue.cs
 using UnityEngine;
 using TMPro;
 

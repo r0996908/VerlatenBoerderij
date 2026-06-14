@@ -1,3 +1,4 @@
+// EnemyCounterText.cs
 using UnityEngine;
 using TMPro;
 

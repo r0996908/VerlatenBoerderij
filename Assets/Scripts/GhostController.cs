@@ -1,3 +1,4 @@
+// GhostController.cs
 using UnityEngine;
 
 // Stuurt het gedrag van een geest aan.
