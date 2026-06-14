@@ -30,7 +30,7 @@ public abstract class EnemyBase : MonoBehaviour
         }
     }
 
-    // Abstracte methode die verplicht wordt geïmplementeerd in elke subklasse.
+    // Abstracte methode die verplicht wordt gemplementeerd in elke subklasse.
     // Elke enemy heeft zijn eigen gedrag.
     protected abstract void HandleBehaviour();
 }
