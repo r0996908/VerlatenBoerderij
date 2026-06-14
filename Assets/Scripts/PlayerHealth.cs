@@ -48,6 +48,7 @@ public class PlayerHealth : MonoBehaviour
     }
 
     // De timer-functie die zorgt voor de spanning
+    // De timer-functie die zorgt voor de spanning
     private IEnumerator DoodSequence()
     {
         isAlDood = true; 
@@ -73,14 +74,15 @@ public class PlayerHealth : MonoBehaviour
             gameOverCanvas.SetActive(true);
             Cursor.lockState = CursorLockMode.None; 
             Cursor.visible = true;                  
+
+            // --- NIEUW: ZET DE HELE GAME OP PAUZE ---
+            // Dit zorgt ervoor dat vijanden bevriezen, niet meer aanvallen en scripts stoppen met rekenen
+            Time.timeScale = 0f; 
         }
 
         // 5. Teleporteer de speler naar de spawnpositie
         transform.position = homeSpawnPositie;
-        Physics.SyncTransforms(); // Dwing Unity om de positie NU te updaten
-
-        // Als de speler direct weer mag lopen na de respawn, haal dan de '//' hieronder weg:
-        // if (cc != null) cc.enabled = true; 
+        Physics.SyncTransforms(); 
         
         isAlDood = false; 
     }

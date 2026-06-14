@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 // Pauzeert en hervat het spel
 // Toont en verbergt het pauzepanel
 // Laat terugkeren naar het hoofdmenu
+// Game restarten
 
 public class PauseMenuController : MonoBehaviour
 {
@@ -97,5 +98,25 @@ public class PauseMenuController : MonoBehaviour
         Cursor.visible = true;
 
         SceneManager.LoadScene(mainMenuSceneName);
+    }
+
+// gekoppeld aan restatknop in pauzemenu
+  // Gekoppeld aan restartknop in pauzemenu (en game-over menu)
+    public void RestartGame()
+    {
+        // 1. Zet de tijd weer op normale snelheid
+        Time.timeScale = 1f;
+
+        // 2. Belangrijk: Maak de muis alvast klaar voor de nieuwe start
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        // 3. OPTIE A: Herlaad de specifieke gameplay scene via jouw variabele
+        // (Als je speel-level toevallig NIET "MainMenu" heet)
+        SceneManager.LoadScene("NaamVanJouwLevelScene"); 
+        
+        // Mocht je level écht dezelfde naam hebben als de actieve scene, 
+        // gebruik dan de code hieronder, maar zet de cursor-locks hierboven erbij:
+        // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
