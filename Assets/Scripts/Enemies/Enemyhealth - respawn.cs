@@ -26,15 +26,14 @@ public class EnemyHealth : MonoBehaviour
     private Coroutine smeltCoroutine;
     // Houdt bij of de smelt-timer loopt
 
-    private void OnTriggerEnter(Collider other)
+private void OnTriggerEnter(Collider other)
+{
+    // We kijken nu of het object dat ons raakt de Tag "Zaklamp" heeft
+    if (other.CompareTag("Zaklamp"))
     {
-        // ❗ BELANGRIJK: Zaklamp gebruikt layer-check
-        if (other.gameObject.layer == LayerMask.NameToLayer("Zaklamp"))
-        {
-            if (smeltCoroutine == null)
-                smeltCoroutine = StartCoroutine(SmeltTimer());
-        }
+        RespawnEnemy();
     }
+}
 
     private void OnTriggerExit(Collider other)
     {

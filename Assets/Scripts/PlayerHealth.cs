@@ -1,87 +1,87 @@
-using System.Collections;
+using System.Collections; // Nodig voor de timer (IEnumerator)
 using UnityEngine;
-
-
-// Beheert de gezondheid van de speler.
-// Speler sterft wanneer een enemy hem raakt
-// Zaklamp wordt genegeerd (enemy mag zaklamp raken zonder speler te doden)
-// Toont Game Over UI
 
 public class PlayerHealth : MonoBehaviour
 {
+    [Header("Spawn Instellingen")]
+    [Tooltip("De X, Y, Z coördinaten waar je opnieuw wilt spawnen na je dood.")]
+    [SerializeField] private Vector3 homeSpawnPositie = new Vector3(0f, 1f, 0f);
+
     [Header("UI Instellingen")]
+    [Tooltip("Sleep hier jouw GameOverCanvas naartoe uit de Hierarchy.")]
     [SerializeField] private GameObject gameOverCanvas;
-    // Canvas dat getoond wordt wanneer de speler sterft
 
     [Header("Audio Instellingen")]
+    [Tooltip("Het geluid dat JIJ (de speler) maakt als je doodgaat.")]
     [SerializeField] private AudioClip mijnPijnSchreeuw;
-    // Geluid dat afgespeeld wordt wanneer de speler sterft
 
     [Header("Animatie / Vertraging")]
+    [Tooltip("Hoeveel seconden moet het duren voordat het scherm komt en je respawnt?")]
     [SerializeField] private float doodVertraging = 2.5f;
-    // Tijd tussen geraakt worden en Game Over tonen
 
-    private bool isAlDood = false;
-    // Voorkomt dat de speler meerdere keren sterft
+    private bool isAlDood = false; // Zorgt ervoor dat de timer niet 100x tegelijk start
 
     private void Start()
     {
-        // Zorg dat Game Over UI onzichtbaar is bij start
         if (gameOverCanvas != null)
+        {
             gameOverCanvas.SetActive(false);
+        }
     }
-
-
-    // Wordt geactiveerd bij een fysieke botsing (bv. zombie loopt tegen speler)
 
     private void OnCollisionEnter(Collision collision)
     {
+        // GEWIJZIGD: Zoekt nu naar "enemy" met een kleine letter!
         if (collision.gameObject.CompareTag("enemy") && !isAlDood)
         {
             StartCoroutine(DoodSequence());
         }
     }
 
-
-    // Wordt geactiveerd wanneer een trigger collider de speler raakt.
-
     private void OnTriggerEnter(Collider other)
     {
-        // ❗ BELANGRIJK:
-        // Als de enemy de ZAKLAMP raakt, mag de speler NIET doodgaan.
-        if (other.gameObject.layer == LayerMask.NameToLayer("Zaklamp"))
-            return;
-
-        // Enemy raakt de speler
+        // GEWIJZIGD: Zoekt nu naar "enemy" met een kleine letter!
         if (other.CompareTag("enemy") && !isAlDood)
         {
             StartCoroutine(DoodSequence());
         }
     }
 
-
-    // Speelt doodanimatie, geluid en toont Game Over scherm.
-
+    // De timer-functie die zorgt voor de spanning
     private IEnumerator DoodSequence()
     {
-        isAlDood = true;
+        isAlDood = true; 
+        Debug.Log("Speler is gegrepen door een enemy! Schreeuw start...");
 
-        // Speel pijnschreeuw af
+        // 1. Speel DIRECT de schreeuw af
         if (mijnPijnSchreeuw != null)
+        {
             AudioSource.PlayClipAtPoint(mijnPijnSchreeuw, transform.position);
+        }
 
-        // Wacht voor effect
+        // 2. Zet de speler direct stil zodat je niet kunt weglopen tijdens het sterven
+        CharacterController cc = GetComponentInParent<CharacterController>();
+        if (cc == null) cc = GetComponent<CharacterController>();
+        if (cc != null) cc.enabled = false;
+
+        // 3. WACHTEN: Unity wacht nu een paar seconden (bijv. 2.5) voor de horror-vibe
         yield return new WaitForSeconds(doodVertraging);
 
-        // Toon Game Over UI
+        // 4. PAS NU komt het Game Over scherm tevoorschijn
         if (gameOverCanvas != null)
+        {
             gameOverCanvas.SetActive(true);
+            Cursor.lockState = CursorLockMode.None; 
+            Cursor.visible = true;                  
+        }
 
-        // Pauzeer spel
-        Time.timeScale = 0f;
+        // 5. Teleporteer de speler naar de spawnpositie
+        transform.position = homeSpawnPositie;
+        Physics.SyncTransforms(); // Dwing Unity om de positie NU te updaten
 
-        // Cursor vrijmaken
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        // Als de speler direct weer mag lopen na de respawn, haal dan de '//' hieronder weg:
+        // if (cc != null) cc.enabled = true; 
+        
+        isAlDood = false; 
     }
 }

@@ -8079,7 +8079,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58e77fa9abdc54a4fa9ad06b378eb11c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
-  homeSpawnPositie: {x: 0, y: 3.59, z: 0}
+  homeSpawnPositie: {x: 0, y: 1, z: 0}
   gameOverCanvas: {fileID: 1803443545}
   mijnPijnSchreeuw: {fileID: 8300000, guid: b35f16acd54364e4283921bbb07235b2, type: 3}
   doodVertraging: 2.5

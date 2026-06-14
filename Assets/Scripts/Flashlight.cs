@@ -1,64 +1,48 @@
 ﻿using UnityEngine;
 
-
-// Stuurt de zaklamp aan.
-// F om licht aan/uit te zetten
-// Alleen wanneer licht actief is kan de zaklamp enemies vernietigen
-// Zaklamp gebruikt een trigger collider om enemies te detecteren
-
 public class Flashlight : MonoBehaviour
 {
-    [Header("Licht Instellingen")]
-    [SerializeField] private GameObject FlashlightLight;
-    // Het daadwerkelijke lichtobject dat aan/uit gezet wordt
-
+    [SerializeField] GameObject FlashlightLight;
     private bool FlashlightActive = false;
-    // Houdt bij of het licht aan staat
 
     [Header("Geluid Instellingen")]
-    [SerializeField] private AudioSource audioSource;
-    // Audio bron voor klikgeluid
+    [SerializeField] private AudioSource audioSource; // De speaker
+    [SerializeField] private AudioClip clickSound;    // Het geluidsbestand (.mp3/.wav)
 
-    [SerializeField] private AudioClip clickSound;
-    // Geluid dat afgespeeld wordt bij aan/uit zetten
-
-    private void Start()
+    // Start is called before the first frame update
+    void Start()
     {
-        // Licht start uit
-        FlashlightLight.SetActive(false);
-
-        // Als er geen AudioSource is, probeer hem te vinden
+        FlashlightLight.gameObject.SetActive(false);
+        
+        // Automatische check: als je de AudioSource vergeet te slepen, 
+        // zoekt hij of er eentje op hetzelfde object staat.
         if (audioSource == null)
-            audioSource = GetComponent<AudioSource>();
-    }
-
-    private void Update()
-    {
-        // F om zaklamp aan/uit te zetten
-        if (Input.GetKeyDown(KeyCode.F))
         {
-            // Speel klikgeluid
-            if (audioSource != null && clickSound != null)
-                audioSource.PlayOneShot(clickSound);
-
-            // Toggle licht
-            FlashlightActive = !FlashlightActive;
-            FlashlightLight.SetActive(FlashlightActive);
+            audioSource = GetComponent<AudioSource>();
         }
     }
 
-
-    // Vernietigt enemies zolang het licht actief is.
-
-    private void OnTriggerStay(Collider other)
+    // Update is called once per frame
+    void Update()
     {
-        // Licht moet aan staan
-        if (!FlashlightActive) return;
-
-        // Enemy geraakt → vernietigen
-        if (other.CompareTag("enemy"))
+        if (Input.GetKeyDown(KeyCode.F))
         {
-            Destroy(other.gameObject);
+            // Speel het klikgeluid af zodra je op F drukt!
+            if (audioSource != null && clickSound != null)
+            {
+                audioSource.PlayOneShot(clickSound);
+            }
+
+            if (FlashlightActive == false)
+            {
+                FlashlightLight.gameObject.SetActive(true);
+                FlashlightActive = true;
+            }
+            else
+            {
+                FlashlightLight.gameObject.SetActive(false);
+                FlashlightActive = false;
+            }
         }
     }
 }
