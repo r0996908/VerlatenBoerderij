@@ -10,13 +10,14 @@ public class EnemyHealth : MonoBehaviour
     public float smeltTijd = 2.0f; 
 
     [Header("Dood & Pijn Effecten")]
-    [SerializeField] private AudioClip pijnSchreeuw;        // Jouw .mp3/.wav schreeuwgeluid
-    [SerializeField] private ParticleSystem doodParticles;   // Jouw Particle System prefab
+    [SerializeField] private AudioClip pijnSchreeuw;        
+    [SerializeField] private ParticleSystem doodParticles;   
 
     private Coroutine smeltCoroutine;
 
     private void OnTriggerEnter(Collider other)
     {
+        // LET OP: "Zaklamp" moet hier verplicht tussen aanhalingstekens staan!
         if (other.CompareTag("Zaklamp"))
         {
             if (smeltCoroutine == null)
@@ -49,37 +50,31 @@ public class EnemyHealth : MonoBehaviour
 
     private void RespawnEnemy()
     {
-        // --- 1. GELUID AFSPELEN OP DE PLEK VAN DE DOOD ---
+        // Geluid afspelen (als het vakje is ingevuld)
         if (pijnSchreeuw != null)
         {
-            // Dit speelt de schreeuw in 3D af op de HUIDIGE positie van de zombie
             AudioSource.PlayClipAtPoint(pijnSchreeuw, transform.position);
         }
 
-        // --- 2. PARTICLES SPAWNEN OP DE PLEK VAN DE DOOD ---
+        // Particles spawnen (als het vakje is ingevuld)
         if (doodParticles != null)
         {
-            // Maak een kopie van het deeltjeseffect op de plek van de zombie
             ParticleSystem effectInstance = Instantiate(doodParticles, transform.position, transform.rotation);
-            
-            // Start het effect
             effectInstance.Play();
-            
-            // Ruim de particle-kloon na 3 seconden netjes op uit het geheugen
             Destroy(effectInstance.gameObject, 3.0f);
         }
 
-        // --- 3. DE ZOMBIE DAADWERKELIJK VERPLAATSEN ---
+        // Verplaats de zombie naar een willekeurig spawnpunt
         if (spawnPunten.Length > 0)
         {
             int willekeurigeIndex = Random.Range(0, spawnPunten.Length);
             transform.position = spawnPunten[willekeurigeIndex];
-            Debug.Log("De zombie schreeuwde het uit en is gerespawned!");
+            Debug.Log("De zombie is succesvol gerespawned!");
         }
         else
         {
             Destroy(gameObject);
-            Debug.Log("Zombie is permanent vernietigd!");
+            Debug.Log("Geen spawnpunten gevonden, zombie vernietigd!");
         }
     }
 }

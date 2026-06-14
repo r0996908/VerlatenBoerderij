@@ -10390,7 +10390,7 @@ GameObject:
   - component: {fileID: 1114695065}
   m_Layer: 8
   m_Name: Zaklamp
-  m_TagString: Untagged
+  m_TagString: Zaklamp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12293,7 +12293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c12c051d09cde6449bc799b277a942f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombieController
-  moveSpeed: 1
+  moveSpeed: 4
   playerTransform: {fileID: 433883575}
   stoppingDistance: 1.02
   maxHearDistance: 15
@@ -12428,7 +12428,7 @@ MonoBehaviour:
   spawnPunten:
   - {x: 2.62, y: -1.07, z: -5.13}
   - {x: 0, y: -0.401, z: -0.451}
-  smeltTijd: 2
+  smeltTijd: 1
   pijnSchreeuw: {fileID: 8300000, guid: 200242cef02473b44ae122a20fcb5474, type: 3}
   doodParticles: {fileID: 4179116638095760776, guid: 16ed5f2955e1ffc4b91f49fd31672940, type: 3}
 --- !u!1 &1469798826
@@ -16638,7 +16638,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2036885025}
   m_Layer: 0
-  m_Name: Enemies/zombies
+  m_Name: Zombie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
