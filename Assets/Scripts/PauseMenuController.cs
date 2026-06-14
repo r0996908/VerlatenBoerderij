@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 // Pauzeert en hervat het spel
 // Toont en verbergt het pauzepanel
 // Laat terugkeren naar het hoofdmenu
+// Game restarten
 
 public class PauseMenuController : MonoBehaviour
 {
