@@ -1,21 +1,25 @@
-using System.Collections;
+using System.Collections; // Nodig voor de timer (IEnumerator)
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
     [Header("Spawn Instellingen")]
+    [Tooltip("De X, Y, Z coördinaten waar je opnieuw wilt spawnen na je dood.")]
     [SerializeField] private Vector3 homeSpawnPositie = new Vector3(0f, 1f, 0f);
 
     [Header("UI Instellingen")]
+    [Tooltip("Sleep hier jouw GameOverCanvas naartoe uit de Hierarchy.")]
     [SerializeField] private GameObject gameOverCanvas;
 
     [Header("Audio Instellingen")]
+    [Tooltip("Het geluid dat JIJ (de speler) maakt als je doodgaat.")]
     [SerializeField] private AudioClip mijnPijnSchreeuw;
 
     [Header("Animatie / Vertraging")]
+    [Tooltip("Hoeveel seconden moet het duren voordat het scherm komt en je respawnt?")]
     [SerializeField] private float doodVertraging = 2.5f;
 
-    private bool isAlDood = false;
+    private bool isAlDood = false; // Zorgt ervoor dat de timer niet 100x tegelijk start
 
     private void Start()
     {
@@ -25,48 +29,59 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    // Wordt geactiveerd bij een fysieke botsing (als de zombie tegen je aanloopt)
-    // Wordt geactiveerd bij een fysieke botsing tegen je lichaam
     private void OnCollisionEnter(Collision collision)
     {
+        // GEWIJZIGD: Zoekt nu naar "enemy" met een kleine letter!
         if (collision.gameObject.CompareTag("enemy") && !isAlDood)
         {
             StartCoroutine(DoodSequence());
         }
     }
 
-    // Wordt geactiveerd als de zombie in een Trigger loopt
     private void OnTriggerEnter(Collider other)
     {
-        // 1. Check of het de enemy is
+        // GEWIJZIGD: Zoekt nu naar "enemy" met een kleine letter!
         if (other.CompareTag("enemy") && !isAlDood)
         {
-            // 2. DE BELANGRIJKSTE CHECK:
-            // We kijken of dit script toevallig de botsing binnenkrijgt via de zaklamp.
-            // Als dit specifieke GameObject een Flashlight-component heeft, OF een child is waar het licht op zit, STOPPEN WE.
-            if (GetComponent<Flashlight>() != null || GetComponentInChildren<Flashlight>() != null)
-            {
-                // We controleren of de zombie de zaklamp raakt.
-                // Als de zombie het LICHT raakt, mag de speler NIET doodgaan!
-                // We willen alleen doodgaan als de zombie de ECHTE speler-body raakt.
-                
-                // Unity stuurt triggers van kinderen door naar de parent. 
-                // Om te checken of hij de body raakt, kijken we of de collider GEEN trigger is.
-                if (other.isTrigger) 
-                {
-                    return; // Het was een trigger-botsing (het licht), dus negeer de dood!
-                }
-            }
-
-            // EXTRA CHECK: Als de zombie jouw 'FlashlightLight' object raakt via de trigger, negeer het!
-            if (gameObject.name != "PlayerCapsule" && gameObject.name != "Player")
-            {
-                // Als dit script per ongeluk op de zaklamp zelf staat, ga dan niet dood.
-                return; 
-            }
-
-            // 3. Pas als de zombie écht door je lichtstraal heen is gelopen en je lichaam raakt:
             StartCoroutine(DoodSequence());
         }
+    }
+
+    // De timer-functie die zorgt voor de spanning
+    private IEnumerator DoodSequence()
+    {
+        isAlDood = true; 
+        Debug.Log("Speler is gegrepen door een enemy! Schreeuw start...");
+
+        // 1. Speel DIRECT de schreeuw af
+        if (mijnPijnSchreeuw != null)
+        {
+            AudioSource.PlayClipAtPoint(mijnPijnSchreeuw, transform.position);
+        }
+
+        // 2. Zet de speler direct stil zodat je niet kunt weglopen tijdens het sterven
+        CharacterController cc = GetComponentInParent<CharacterController>();
+        if (cc == null) cc = GetComponent<CharacterController>();
+        if (cc != null) cc.enabled = false;
+
+        // 3. WACHTEN: Unity wacht nu een paar seconden (bijv. 2.5) voor de horror-vibe
+        yield return new WaitForSeconds(doodVertraging);
+
+        // 4. PAS NU komt het Game Over scherm tevoorschijn
+        if (gameOverCanvas != null)
+        {
+            gameOverCanvas.SetActive(true);
+            Cursor.lockState = CursorLockMode.None; 
+            Cursor.visible = true;                  
+        }
+
+        // 5. Teleporteer de speler naar de spawnpositie
+        transform.position = homeSpawnPositie;
+        Physics.SyncTransforms(); // Dwing Unity om de positie NU te updaten
+
+        // Als de speler direct weer mag lopen na de respawn, haal dan de '//' hieronder weg:
+        // if (cc != null) cc.enabled = true; 
+        
+        isAlDood = false; 
     }
 }

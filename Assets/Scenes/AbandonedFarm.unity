@@ -8079,8 +8079,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58e77fa9abdc54a4fa9ad06b378eb11c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
-  homeSpawnPositie: {x: 0, y: 3.59, z: 0}
-  gameOverCanvas: {fileID: 1803443545}
+  homeSpawnPositie: {x: 0, y: 1, z: 0}
+  gameOverCanvas: {fileID: 1044952999}
   mijnPijnSchreeuw: {fileID: 8300000, guid: b35f16acd54364e4283921bbb07235b2, type: 3}
   doodVertraging: 2.5
 --- !u!54 &625592047
@@ -10180,6 +10180,7 @@ GameObject:
   - component: {fileID: 1114695062}
   - component: {fileID: 1114695064}
   - component: {fileID: 1114695063}
+  - component: {fileID: 1114695066}
   - component: {fileID: 1114695065}
   m_Layer: 8
   m_Name: Zaklamp
@@ -10318,6 +10319,33 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 6.7248325}
   m_Center: {x: 0, y: 0, z: 2.8624163}
+--- !u!54 &1114695066
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114695061}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &1170464602
 PrefabInstance:
   m_ObjectHideFlags: 0
