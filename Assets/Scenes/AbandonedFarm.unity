@@ -15,7 +15,7 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
   m_Fog: 1
-  m_FogColor: {r: 0.19517621, g: 0.2460864, b: 0.3207547, a: 1}
+  m_FogColor: {r: 0.22761658, g: 0.25395632, b: 0.2924528, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.053
   m_LinearFogStart: 0
@@ -10583,10 +10583,10 @@ Light:
   serializedVersion: 13
   m_Type: 0
   m_Color: {r: 0.9080836, g: 1, b: 0.76862746, a: 1}
-  m_Intensity: 7
-  m_Range: 74.8
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
+  m_Intensity: 15.17
+  m_Range: 60
+  m_SpotAngle: 23.295683
+  m_InnerSpotAngle: 11.556158
   m_CookieSize2D: {x: 0.5, y: 0.5}
   m_Shadows:
     m_Type: 0
