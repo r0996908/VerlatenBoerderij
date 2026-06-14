@@ -1,80 +1,83 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
+
+
+// Beheert de gezondheid van een enemy.
+// Enemy smelt wanneer hij in zaklamp-licht staat
+// Respawn op willekeurige spawnpunten
 
 public class EnemyHealth : MonoBehaviour
 {
     [Header("Respawn Instellingen")]
-    public Vector3[] spawnPunten; 
-    
+    public Vector3[] spawnPunten;
+    // Lijst van mogelijke respawn locaties
+
     [Header("Licht Instellingen")]
-    public float smeltTijd = 2.0f; 
+    public float smeltTijd = 2.0f;
+    // Hoe lang de enemy in het licht moet staan om te smelten
 
     [Header("Dood & Pijn Effecten")]
-    [SerializeField] private AudioClip pijnSchreeuw;        
-    [SerializeField] private ParticleSystem doodParticles;   
+    [SerializeField] private AudioClip pijnSchreeuw;
+    // Geluid bij dood
+
+    [SerializeField] private ParticleSystem doodParticles;
+    // Particles bij dood
 
     private Coroutine smeltCoroutine;
+    // Houdt bij of de smelt-timer loopt
 
     private void OnTriggerEnter(Collider other)
     {
-        // LET OP: "Zaklamp" moet hier verplicht tussen aanhalingstekens staan!
-        if (other.CompareTag("Zaklamp"))
+        // ❗ BELANGRIJK: Zaklamp gebruikt layer-check
+        if (other.gameObject.layer == LayerMask.NameToLayer("Zaklamp"))
         {
             if (smeltCoroutine == null)
-            {
                 smeltCoroutine = StartCoroutine(SmeltTimer());
-            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Zaklamp"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Zaklamp"))
         {
             if (smeltCoroutine != null)
             {
                 StopCoroutine(smeltCoroutine);
                 smeltCoroutine = null;
-                Debug.Log("Licht weg! Zombie herstelt.");
             }
         }
     }
 
     private IEnumerator SmeltTimer()
     {
-        Debug.Log("Zombie staat in het licht... timer loopt!");
         yield return new WaitForSeconds(smeltTijd);
         RespawnEnemy();
-        smeltCoroutine = null; 
+        smeltCoroutine = null;
     }
 
     private void RespawnEnemy()
     {
-        // Geluid afspelen (als het vakje is ingevuld)
+        // Speel geluid
         if (pijnSchreeuw != null)
-        {
             AudioSource.PlayClipAtPoint(pijnSchreeuw, transform.position);
-        }
 
-        // Particles spawnen (als het vakje is ingevuld)
+        // Particles
         if (doodParticles != null)
         {
-            ParticleSystem effectInstance = Instantiate(doodParticles, transform.position, transform.rotation);
-            effectInstance.Play();
-            Destroy(effectInstance.gameObject, 3.0f);
+            ParticleSystem effect = Instantiate(doodParticles, transform.position, transform.rotation);
+            effect.Play();
+            Destroy(effect.gameObject, 3f);
         }
 
-        // Verplaats de zombie naar een willekeurig spawnpunt
+        // Respawn op random punt
         if (spawnPunten.Length > 0)
         {
-            int willekeurigeIndex = Random.Range(0, spawnPunten.Length);
-            transform.position = spawnPunten[willekeurigeIndex];
-            Debug.Log("De zombie is succesvol gerespawned!");
+            int index = Random.Range(0, spawnPunten.Length);
+            transform.position = spawnPunten[index];
         }
         else
         {
             Destroy(gameObject);
-            Debug.Log("Geen spawnpunten gevonden, zombie vernietigd!");
         }
     }
 }

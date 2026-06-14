@@ -1,52 +1,63 @@
-using UnityEngine;
+﻿using UnityEngine;
+
+
+// Stuurt de zaklamp aan.
+// F om licht aan/uit te zetten
+// Alleen wanneer licht actief is kan de zaklamp enemies vernietigen
+// Zaklamp gebruikt een trigger collider om enemies te detecteren
 
 public class Flashlight : MonoBehaviour
 {
-    [SerializeField] GameObject FlashlightLight;
+    [Header("Licht Instellingen")]
+    [SerializeField] private GameObject FlashlightLight;
+    // Het daadwerkelijke lichtobject dat aan/uit gezet wordt
+
     private bool FlashlightActive = false;
+    // Houdt bij of het licht aan staat
 
     [Header("Geluid Instellingen")]
-    [SerializeField] private AudioSource audioSource; // De speaker
-    [SerializeField] private AudioClip clickSound;    // Het geluidsbestand
+    [SerializeField] private AudioSource audioSource;
+    // Audio bron voor klikgeluid
 
-    void Start()
+    [SerializeField] private AudioClip clickSound;
+    // Geluid dat afgespeeld wordt bij aan/uit zetten
+
+    private void Start()
     {
-        FlashlightLight.gameObject.SetActive(false);
-        
+        // Licht start uit
+        FlashlightLight.SetActive(false);
+
+        // Als er geen AudioSource is, probeer hem te vinden
         if (audioSource == null)
-        {
             audioSource = GetComponent<AudioSource>();
-        }
     }
 
-    void Update()
+    private void Update()
     {
+        // F om zaklamp aan/uit te zetten
         if (Input.GetKeyDown(KeyCode.F))
         {
+            // Speel klikgeluid
             if (audioSource != null && clickSound != null)
-            {
                 audioSource.PlayOneShot(clickSound);
-            }
 
-            if (FlashlightActive == false)
-            {
-                FlashlightLight.gameObject.SetActive(true);
-                FlashlightActive = true;
-            }
-            else
-            {
-                FlashlightLight.gameObject.SetActive(false);
-                FlashlightActive = false;
-            }
+            // Toggle licht
+            FlashlightActive = !FlashlightActive;
+            FlashlightLight.SetActive(FlashlightActive);
         }
     }
 
-    // De zaklamp vernietigt alleen de zombie als het licht actief is!
+
+    // Vernietigt enemies zolang het licht actief is.
+
     private void OnTriggerStay(Collider other)
     {
-        if (FlashlightActive && other.CompareTag("enemy"))
+        // Licht moet aan staan
+        if (!FlashlightActive) return;
+
+        // Enemy geraakt → vernietigen
+        if (other.CompareTag("enemy"))
         {
-            Debug.Log("Licht schijnt op " + other.name + "! Zombie vernietigd.");
             Destroy(other.gameObject);
         }
     }
